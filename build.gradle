@@ -12,6 +12,8 @@ buildscript {
         classpath 'com.android.tools.build:gradle:4.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'gradle.plugin.org.mozilla.rust-android-gradle:plugin:0.8.3'
+        //https://github.com/MegatronKing/StringFog
+        classpath 'com.github.megatronking.stringfog:gradle-plugin:2.2.1'
     }
 }
 allprojects {

@@ -1,0 +1,15 @@
+//https://blog.csdn.net/qiaoijun/article/details/107149352/
+apply plugin: 'groovy'
+repositories {
+    google()
+    jcenter()
+}
+
+dependencies {
+    implementation localGroovy()
+    implementation gradleApi()
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    
+    // 自定义算法实现依赖库
+    implementation 'com.github.megatronking.stringfog:interface:1.1.0'
+}

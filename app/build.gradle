@@ -2,8 +2,8 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'org.mozilla.rust-android-gradle.rust-android'
+    id 'stringfog'
 }
-
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -25,8 +25,12 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -46,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -54,6 +59,8 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    // 自定义算法实现依赖库
+    implementation 'com.github.megatronking.stringfog:interface:1.1.0'
 }
 //https://github.com/mozilla/rust-android-gradle
 cargo {
@@ -77,4 +84,14 @@ afterEvaluate {
         def buildType = "${variant.buildType.name.capitalize()}"
         tasks["generate${productFlavor}${buildType}Assets"].dependsOn(tasks["cargoBuild"])
     }
+}
+stringfog {
+    // 这是加解密key，可以自由定义。
+    key 'KNMG(看个锤子,我容易么???)'
+    // 开关
+    enable true
+    // 加解密库的实现类路径，需和上面配置的加解密算法库一致。
+    implementation 'com.jizhi.stringfog.CustomStringFogImpl'
+    // 指定需加密的代码包路径，可配置多个，未指定将默认全部加密。
+    fogPackages = ['com.jizhi.rustonandroidtemplate']
 }
